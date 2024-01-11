@@ -22,7 +22,7 @@ def _create_comparison_operator(
         connection.execute(
             sqlalchemy.text(
                 f"""
-            CREATE FUNCTION {comparison_function_name}(
+            CREATE FUNCTION {schema}.{comparison_function_name}(
                 new_enum_val {schema}.{enum_name}, old_enum_val {schema}.{old_enum_name}
             )
             RETURNS boolean AS $$
@@ -41,7 +41,7 @@ def _create_comparison_operator(
         connection.execute(
             sqlalchemy.text(
                 f"""
-            CREATE FUNCTION {comparison_function_name}(
+            CREATE FUNCTION {schema}.{comparison_function_name}(
                 new_enum_val {schema}.{enum_name}, old_enum_val {schema}.{old_enum_name}
             )
             RETURNS boolean AS $$
@@ -53,10 +53,10 @@ def _create_comparison_operator(
     connection.execute(
         sqlalchemy.text(
             f"""
-        CREATE OPERATOR {operator} (
+        CREATE OPERATOR {schema}.{operator} (
             leftarg = {schema}.{enum_name},
             rightarg = {schema}.{old_enum_name},
-            procedure = {comparison_function_name}
+            procedure = {schema}.{comparison_function_name}
         )
     """
         )
@@ -92,7 +92,7 @@ def _drop_comparison_operator(
     connection.execute(
         sqlalchemy.text(
             f"""
-        DROP FUNCTION {comparison_function_name}(
+        DROP FUNCTION {schema}.{comparison_function_name}(
             new_enum_val {schema}.{enum_name}, old_enum_val {schema}.{old_enum_name}
         ) CASCADE
     """
